@@ -12,6 +12,12 @@ public class Student {
 	PreparedStatement pstmt = null;
 	DatabaseConnection databaseConnection = new DatabaseConnection();
 
+	boolean loggedIn = false;
+
+	public boolean isLoggedIn() {
+		return loggedIn = true;
+	}
+
 	public void insertStudentDetails(String fname, String lname, String username, String password, String city,
 			String email, String mobileNo) throws SQLException {
 		try {
@@ -44,11 +50,6 @@ public class Student {
 			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-//				if (rs.getString(4).equals(uname) && rs.getString(5).equals(password)) {
-//					System.out.println("Student Login Successfully !!!!!!!!!!");
-//				} else {
-//					System.out.println("Incorrect Credentials............");
-//				}
 				int studentId = rs.getInt("studentid");
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
@@ -101,6 +102,31 @@ public class Student {
 			System.out.println("Your score is: " + marks);
 
 		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			conn.close();
+			pstmt.close();
+		}
+	}
+
+	public void getStudentResult(String username, String password) throws SQLException {
+		try {
+			conn = databaseConnection.getConnectionDetails();
+			String selectSql = "SELECT firstname, lastname,result FROM student_register WHERE username = ? AND password = ?";
+			pstmt = conn.prepareStatement(selectSql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				int result = rs.getInt("result");
+				String firstName = rs.getString("firstname");
+				String lastName = rs.getString("lastname");
+				System.out.println(firstName + " " + lastName + " your Score is : " + result);
+			} else {
+				System.out.println("Incorrect Credentials............");
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			conn.close();
