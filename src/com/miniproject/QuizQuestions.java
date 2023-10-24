@@ -70,12 +70,4 @@ public class QuizQuestions {
 		}
 	}
 
-	public static void main(String[] args) throws SQLException{
-		
-		System.out.println("-------------Quiz----------------");
-		
-		QuizQuestions quizQuestions = new QuizQuestions();
-		quizQuestions.getQuizQuestions();
-
-	}
 }
